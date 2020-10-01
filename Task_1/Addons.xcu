@@ -25,7 +25,7 @@
                         <value>vnd.demo.complextoolbarcontrols.demoaddon:ButtonCmd1</value>
                     </prop>
                     <prop oor:name="Title" oor:type="xs:string">
-                        <value xml:lang="en-US">DANON</value>
+                        <value xml:lang="en-US">TRANSPORT</value>
                     </prop>
                     <prop oor:name="Target" oor:type="xs:string">
                         <value>_self</value>
@@ -42,7 +42,7 @@
                         <value>vnd.demo.complextoolbarcontrols.demoaddon:ButtonCmd2</value>
                     </prop>
                     <prop oor:name="Title" oor:type="xs:string">
-                        <value xml:lang="en-US">AGRONOM</value>
+                        <value xml:lang="en-US">MORE TABLES</value>
                     </prop>
                     <prop oor:name="Target" oor:type="xs:string">
                         <value>_self</value>
