@@ -5,6 +5,7 @@
 #include <random>
 #include <iostream>
 #include <thread>
+#include <fstream>
 
 class Work {
     int num, time;
@@ -200,7 +201,7 @@ public:
     Solution *Simulate() {
         while (Stop < 100) {
             Stop++;
-            for (int i = 0; i < 100; i++) {
+            for (int i = 0; i < 15; i++) {
                 Solution *MutateSol = M->Mutate(S->cpObj(), S->getWorkCount());
                 int C = MutateSol->getCritVal();
                 if (C < Crit) {
@@ -242,34 +243,67 @@ void func (Shed_Len *SInit, Mutation_R *MInit, Boltzmann *TInit, Shed_Len **Res,
     delete M;
 }
 
+void generate (int NWork, int NProc, int TimeLim1, int TimeLim2) {
+    std::srand(std::time(nullptr));
+    std::ofstream data;
+    data.open("data.csv");
+    data << NWork << "," << NProc << std::endl;
+    for (int i = 0; i < NWork; i++) {
+        data << i << "," << std::rand() % (TimeLim2 - TimeLim1) + TimeLim1 << std::endl;
+    }
+    data.close();
+}
+
+void encode (int &NWork, int &NProc, std::vector<Work> &Works) {
+    std::ifstream data;
+    data.open("data.csv");
+    NWork = 0;
+    NProc = 0;
+    Works.clear();
+    std::vector<int> tmpV;
+    int VP = 0;
+    char tmp;
+    data.read((&tmp), 1);
+    while (!data.eof()) {
+        tmpV.push_back(0);
+        while (tmp != ',' && tmp != 10) {
+            tmpV[VP] = tmpV[VP] * 10 + tmp - '0';
+            data.read((&tmp), 1);
+        }
+        VP++;
+        data.read((&tmp), 1);
+    }
+    NWork = tmpV[0];
+    NProc = tmpV[1];
+    VP = 2;
+    for (int i = 0; i < NWork; i++) {
+        Works.emplace_back(Work(tmpV[VP], tmpV[VP + 1]));
+        VP += 2;
+    }
+    tmpV.clear();
+    data.close();
+}
+
 int main() {
-    Work W1(1,1);
-    Work W2(2,2);
-    Work W3(3,2);
-    Work W4(4,3);
-    Work W5(5,5);
-    Work W6(6,3);
+    //generate(100, 10, 1, 10);
     std::vector<Work> W;
-    W.push_back(W1);
-    W.push_back(W2);
-    W.push_back(W3);
-    W.push_back(W4);
-    W.push_back(W5);
-    W.push_back(W6);
+    int NWork, NProc;
+    encode(NWork, NProc, W);
     Shed_Len* S;
-    S = new Shed_Len(6, 2, W);
+    S = new Shed_Len(NWork, NProc, W);
     Mutation_R M;
     Boltzmann T(100);
+    int Stop = 0;
     //SimAnn A(S, &T, &M);
     //Shed_Len *Ans = dynamic_cast<Shed_Len*>(A.Simulate());
     //Ans->printSol();
     //delete Ans;
-    int NTread = 6;
+    int NTread = 4;
     std::vector<std::thread> ThreadVector;
-    for (int iter = 0; iter < 10; iter++) {
+    int BestMetric = S->getCritVal();
+    while (Stop < 10) {
         std::vector<Shed_Len*> Buffer(NTread);
         for (int i = 0; i < NTread; i++) {
-            //func(S, &M, &T, Buffer, i);
             ThreadVector.emplace_back(func, S, &M, &T, &(Buffer[i]), i);
         }
         for (int i = 0; i < NTread; i++) {
@@ -278,9 +312,9 @@ int main() {
         delete S;
         //Buffer[0]->printSol();
         Shed_Len *BestSolution = dynamic_cast<Shed_Len*>(Buffer[0]->cpObj());
-        int BestMetric = BestSolution->getCritVal();
         for (int i = 0; i < NTread; i++) {
             if (BestMetric > Buffer[i]->getCritVal()) {
+                Stop = 0;
                 delete BestSolution;
                 BestSolution = dynamic_cast<Shed_Len*>(Buffer[i]->cpObj());
                 BestMetric = BestSolution->getCritVal();
@@ -291,8 +325,10 @@ int main() {
         S = BestSolution;
         Buffer.clear();
         ThreadVector.clear();
+        Stop++;
     }
     S->printSol();
+    std::cout << S->getCritVal() << std::endl;
     std::cout << "PROGRAM END" << std::endl;
     delete S;
 
