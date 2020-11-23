@@ -1,0 +1,4 @@
+/home/evgeny/Sem_7/prac-7/Task_2/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/evgeny/Sem_7/prac-7/Task_2/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/evgeny/Sem_7/prac-7/Task_2/cmake-build-debug/CMakeFiles/Gen.dir
+/home/evgeny/Sem_7/prac-7/Task_2/cmake-build-debug/CMakeFiles/Task_2.dir

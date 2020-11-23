@@ -1,0 +1,32 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/evgeny/Sem_7/prac-7/Task_2/Generator.cpp
+csv_mod.h
+/home/evgeny/Sem_7/prac-7/Task_2/csv_mod.h
+iostream
+/home/evgeny/Sem_7/prac-7/Task_2/iostream
+
+/home/evgeny/Sem_7/prac-7/Task_2/csv_mod.h
+solution.h
+/home/evgeny/Sem_7/prac-7/Task_2/solution.h
+ctime
+-
+random
+-
+fstream
+-
+
+/home/evgeny/Sem_7/prac-7/Task_2/solution.h
+vector
+-
+list
+-
+iostream
+-
+

@@ -20,9 +20,10 @@ public:
         Stop = 0;
     }
     Solution *Simulate() {
+        std::srand(std::time(nullptr));
         while (Stop < 100) {
             Stop++;
-            for (int i = 0; i < 15; i++) {
+            for (int i = 0; i < 20; i++) {
                 Solution *MutateSol = M->Mutate(S->cpObj(), S->getWorkCount());
                 int C = MutateSol->getCritVal();
                 if (C < Crit) {
@@ -36,9 +37,8 @@ public:
                         delete S;
                         S = MutateSol->cpObj();
                     } else {
-                        std::srand(std::time(nullptr));
                         double P = (double)std::rand() / RAND_MAX;
-                        if (P > exp(-D / T->getTemp())) {
+                        if (P < exp(-D / T->getTemp())) {
                             delete S;
                             S = MutateSol->cpObj();
                         }

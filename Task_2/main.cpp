@@ -52,16 +52,20 @@ int main() {
     //
     int TM, ST;
     std::cout << "Choose temperature mode and start temperature (1 - Boltzmann, 2 - Cauchy, else Simple mode): " << std::endl;
-    std::cin >> TM >> ST;
+    //std::cin >> TM >> ST;
+    TM = 2;
+    ST = 1000;
     Boltzmann TB(ST);
     Cauchy TC(ST);
     Simple TS(ST);
     int Stop = 0;
     std::cout << "Enter the number of threads: " << std::endl;
     int NTread;
-    std::cin >> NTread;
+    //std::cin >> NTread;
+    NTread = 4;
     std::vector<std::thread> ThreadVector;
     int BestMetric = S->getCritVal();
+    std::time_t  StartTime = std::time(NULL);
     while (Stop < 10) {
         std::vector<Shed_Len*> Buffer(NTread);
         if (TM == 1) {
@@ -87,6 +91,7 @@ int main() {
         for (int i = 0; i < NTread; i++) {
             if (BestMetric > Buffer[i]->getCritVal()) {
                 Stop = 0;
+                std::cout << std::endl << "|";
                 delete BestSolution;
                 BestSolution = dynamic_cast<Shed_Len*>(Buffer[i]->cpObj());
                 BestMetric = BestSolution->getCritVal();
@@ -98,10 +103,13 @@ int main() {
         Buffer.clear();
         ThreadVector.clear();
         Stop++;
+        std::cout << "*";
     }
+    std::cout << std::endl;
     S->printSol();
     std::cout << S->getCritVal() << std::endl;
-    std::cout << "PROGRAM END" << std::endl;
+    std::time_t  EndTime = std::time(NULL);
+    std::cout << "PROGRAM END. Work Time = " << EndTime - StartTime <<  std::endl;
     delete S;
 
     return 0;
